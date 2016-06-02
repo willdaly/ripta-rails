@@ -36,8 +36,7 @@ class NumbersController < ApplicationController
     @client.account.messages.create({
       :from => @twilio_number, 
       :to => @number.tocall, 
-      :body => 'hey, it works!', 
-      :medi_url => 'http://emojipedia-us.s3.amazonaws.com/cache/36/65/36653dc23828ee0486efc2076279bf24.png'
+      :body => 'hey, it works!',
     })
 
     respond_to do |format|
