@@ -1,5 +1,35 @@
-<h1>New Number</h1>
+<head>
+  <title>Lu's Skills Assessment</title>
+  <style>
+    body {
+      padding-top: 20px;
+      text-align: center;
+      background-color: white;
+      background-size: cover;
+      background-position: center;
+      color: black;
+      font-family: helvetica;
+    }
+    p {
+      font-size: 18px;
+    }
+    input {
+      border: 1;
+      border-color: black;
+      padding: 12px;
+      font-size: 14px;
+    }
+    input[type="submit"] {
+      background: black;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+<h1>Hi! Please enter your phone number</h1>
 
 <%= render 'form' %>
 
 <%= link_to 'Back', numbers_path %>
+</body>
