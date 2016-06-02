@@ -37,6 +37,7 @@ class NumbersController < ApplicationController
       :from => @twilio_number, 
       :to => @number.tocall, 
       :body => 'hey, it works!', 
+      :medi_url => 'http://emojipedia-us.s3.amazonaws.com/cache/36/65/36653dc23828ee0486efc2076279bf24.png'
     })
 
     respond_to do |format|
