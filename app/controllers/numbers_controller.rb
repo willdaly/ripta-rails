@@ -25,17 +25,11 @@ class NumbersController < ApplicationController
   # POST /numbers.json
   def create
     @number = Number.new(number_params)
-
-    account_sid = 'AC7ffe0262875158a08c112f7f3f60958c' 
-    auth_token = 'd74c5e365402e45c11a686a3ac4e1430' 
-
-    # set up a client to talk to the Twilio REST API 
-    @client = Twilio::REST::Client.new account_sid, auth_token 
-
-    @twilio_number = '+19148882435'
+    # set up a client to talk to the Twilio REST API
+    @client = Twilio::REST::Client.new ACCOUNT_SID, AUTH_TOKEN 
     @client.account.messages.create({
-      :from => @twilio_number, 
-      :to => @number.tocall, 
+      :from => TWILIO_NUMBER,
+      :to => @number.tocall,
       :body => 'hey, it works!',
     })
 
