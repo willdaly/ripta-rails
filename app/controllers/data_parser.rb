@@ -11,7 +11,7 @@ class DataParser
   def getRouteId(user_stop_id)
     route_id = 0
 
-    // some code here
+    # some code here
 
     getTripIds(route_id)
   end
@@ -19,7 +19,7 @@ class DataParser
   def getAllTripIds(route_id)
     all_trip_ids = []
 
-    // some code here
+    # some code here
 
     all_trip_ids
   end
@@ -27,7 +27,7 @@ class DataParser
   def getCurrentTrips(all_trip_id)
     current_trips = []
 
-    // some code here
+    # some code here
 
     getCurrentStops(current_trips)
   end
@@ -35,7 +35,7 @@ class DataParser
   def getCurrentStops(current_trips)
     current_stops = []
 
-    // some code here
+    # some code here
 
     current_stops
   end
@@ -43,7 +43,7 @@ class DataParser
   def calculate(user_stop_id, current_stops)
     stops_away = 0
 
-    // some code here
+    # some code here
 
     stops_away
   end
