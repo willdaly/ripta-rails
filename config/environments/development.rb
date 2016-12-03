@@ -38,4 +38,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  ACCOUNT_SID = Rails.application.secrets.account_sid
+  AUTH_TOKEN = Rails.application.secrets.auth_token
+  TWILIO_NUMBER = Rails.application.secrets.twilio_number
 end
