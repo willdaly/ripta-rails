@@ -1,10 +1,19 @@
 require 'json'
 require 'numbers_controller.rb'
+require 'gtfs-realtime'
 
 STOP_ROUTES = '../data/stop_routes.json'
 TRIPS = '../data/trips.json'
 ROUTE_STOPS = '../data/route_stops.json'
-RIPTAAPI = 'http://realtime.ripta.com:81/api/vehiclepositions?format=json'
+VEHICLE_POSITIONS = 'http://realtime.ripta.com:81/api/vehiclepositions?format=json'
+
+# GTFS::Realtime.configure do |config|
+#   # config.static_feed = "http://www.ripta.com/googledata/current/google_transit.zip"
+#   # config.trip_updates_feed = "http://realtime.ripta.com:81/api/tripupdates"
+#   config.vehicle_positions_feed = "http://realtime.ripta.com:81/api/vehiclepositions"
+#   # config.service_alerts_feed = "http://realtime.ripta.com:81/api/servicealerts"
+#   config.database_url = ENV["DATABASE_URL"]
+# end
 
 class DataParser
   def initialize(user_stop_id)
@@ -45,7 +54,16 @@ class DataParser
   end
 
 # 3. trip_ids -> current trip_ids
-  def getCurrentTrips(all_trip_id)
+  def getCurrentTrips(all_trip_ids)
+    # GTFS::Realtime.refresh_realtime_feed!
+    vehicle_data = JSON.load(open(VEHICLE_POSITIONS))
+    for entity in vehicle_data
+      for trip_id in all_trip_ids
+        if entity["vehicle"]["trip"]["trip_id"] == trip_id
+          current_trips << trip_id
+        end
+      end
+    end
     current_trips = []
     # some code here
     getCurrentStops(current_trips)
