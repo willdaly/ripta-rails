@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160601221327) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "numbers", force: :cascade do |t|
     t.string   "tocall"
     t.datetime "created_at", null: false
