@@ -1,16 +1,18 @@
+require 'data_parser.rb'
+
 class NumbersController < ApplicationController
-  before_action :set_number, only: [:show, :edit, :update, :destroy]
+  before_action :set_number, only: [:destroy]
 
   # GET /numbers
   # GET /numbers.json
-  def index
-    @numbers = Number.all
-  end
+  # def index
+  #   @numbers = Number.all
+  # end
 
   # GET /numbers/1
   # GET /numbers/1.json
-  def show
-  end
+  # def show
+  # end
 
   # GET /numbers/new
   def new
@@ -18,8 +20,8 @@ class NumbersController < ApplicationController
   end
 
   # GET /numbers/1/edit
-  def edit
-  end
+  # def edit
+  # end
 
   # POST /numbers
   # POST /numbers.json
@@ -47,17 +49,17 @@ class NumbersController < ApplicationController
 
   # PATCH/PUT /numbers/1
   # PATCH/PUT /numbers/1.json
-  def update
-    respond_to do |format|
-      if @number.update(number_params)
-        format.html { redirect_to @number, notice: 'Number was successfully updated.' }
-        format.json { render :show, status: :ok, location: @number }
-      else
-        format.html { render :edit }
-        format.json { render json: @number.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @number.update(number_params)
+  #       format.html { redirect_to @number, notice: 'Number was successfully updated.' }
+  #       format.json { render :show, status: :ok, location: @number }
+  #     else
+  #       format.html { render :edit }
+  #       format.json { render json: @number.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /numbers/1
   # DELETE /numbers/1.json
