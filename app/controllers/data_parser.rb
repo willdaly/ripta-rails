@@ -1,6 +1,7 @@
 require 'json'
+require 'open-uri'
 require 'numbers_controller.rb'
-require 'gtfs-realtime'
+# require 'gtfs-realtime'
 
 STOP_ROUTES = '../data/stop_routes.json'
 TRIPS = '../data/trips.json'
@@ -22,20 +23,18 @@ class DataParser
 
 # 1. user's stop_id -> route_id
   def getRouteId(user_stop_id)
+    @user_route_ids = []
     if user_stop_id == nil
       puts "wat"
-      break
     else
-      @stop_routes_array = File.read(STOP_ROUTES)
+      @stop_routes_array = JSON.parse(File.read(STOP_ROUTES))
       for stop in @stop_routes_array
         if stop["stop_id"] == user_stop_id
-          route_ids = item["route_ids"]
+          @user_route_ids = item["route_ids"]
         end
       end
 
-      if route_ids == nil
-        break
-      else
+      unless route_ids == nil
         getTripIds(route_ids)
       end
     end
@@ -43,7 +42,7 @@ class DataParser
 
 # 2. route_id -> trip_ids
   def getAllTripIds(route_id)
-    @trips_array = File.read(TRIPS)
+    @trips_array = JSON.parse(File.read(TRIPS))
     all_trip_ids = []
     for trip in @trips_array
       if trip[:route_id] = route_id
@@ -53,32 +52,31 @@ class DataParser
     all_trip_ids
   end
 
-# 3. trip_ids -> current trip_ids
+# 3. trip_ids -> current trip_ids & stop_ids
   def getCurrentTrips(all_trip_ids)
+    # current_trips = []
+    current_stops = []
+
     # GTFS::Realtime.refresh_realtime_feed!
     vehicle_data = JSON.load(open(VEHICLE_POSITIONS))
-    for entity in vehicle_data
+    @entities_array = vehicle_data["entity"]
+
+    for entity in @entities_array
       for trip_id in all_trip_ids
         if entity["vehicle"]["trip"]["trip_id"] == trip_id
-          current_trips << trip_id
+          # current_trips << entity["vehicle"]["trip"]["trip_id"]
+          current_stops << entity["vehicle"]["stop_id"]
         end
       end
     end
-    current_trips = []
-    # some code here
-    getCurrentStops(current_trips)
+
+    getArrayIndexes(current_stops)
   end
 
-# 4. current trip_ids -> stop_ids
-  def getCurrentStops(current_trips)
-    current_stops = []
-    # some code here
-    current_stops
-  end
-
-# 5. route_id & stop_ids
+# 4. route_id & stop_ids
   def getArrayIndexes(current_stops)
-    @route_stops_array = FILE.read(ROUTE_STOPS)
+    route_stops_array = JSON.parse(File.read(ROUTE_STOPS))
+
 
   end
 
