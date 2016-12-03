@@ -26,7 +26,7 @@ class NumbersController < ApplicationController
   def create
     @number = Number.new(number_params)
     # set up a client to talk to the Twilio REST API
-    @client = Twilio::REST::Client.new ACCOUNT_SID, AUTH_TOKEN 
+    @client = Twilio::REST::Client.new ACCOUNT_SID, AUTH_TOKEN
     @client.account.messages.create({
       :from => TWILIO_NUMBER,
       :to => @number.tocall,
