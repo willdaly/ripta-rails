@@ -73,17 +73,37 @@ class DataParser
     getArrayIndexes(current_stops)
   end
 
-# 4. route_id & stop_ids
+# 5. route_id & stop_ids
   def getArrayIndexes(current_stops)
     route_stops_array = JSON.parse(File.read(ROUTE_STOPS))
+    stop_index_array = []
+    user_stop_index = 0
 
+    for user_route in @user_route_ids
+      for route in route_stops_array
+        if route["route_id"] == user_route
+          for current_stop in current_stops
+            user_stop_index = route["stop_ids"].index(@user_stop_id)
+
+            stop_index_array << route["stop_ids"].index(current_stop)
+            puts "index is " + route["stop_ids"].index(current_stop)
+          end
+        end
+      end
+      calculate(user_stop_index, stop_index_array)
+    end
 
   end
 
 # 6. computation
-  def calculate(user_stop_id, current_stops)
-    stops_away = 0
-    # some code here
+  def calculate(user_stop_index, stop_index_array)
+    stops_away = stop_index_array[0]
+
+    for index in stop_index_array
+      if index < user_stop_index && index > stop_index_array[0]
+        stops_away = index
+      end
+    end
     stops_away
   end
 end
