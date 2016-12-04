@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
-  resources :numbers
+  # resources :numbers
   root 'numbers#new'
+
+  get '/numbers/new' => 'numbers#new'
+  post '/numbers/' => 'numbers#create'
+  delete '/numbers/:id' => 'numbers#destroy'
+
   post 'messages/reply' => 'messages#reply'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
