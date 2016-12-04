@@ -15,10 +15,8 @@ class DataParser
   STOP_ROUTES = 'app/assets/data/stop_routes.json'
   TRIPS = 'app/assets/data/trips.json'
   ROUTE_STOPS = 'app/assets/data/route_stops.json'
+  TRIP_STOPS = 'app/assets/data/stop_times_redux.json'
   VEHICLE_POSITIONS = 'http://realtime.ripta.com:81/api/vehiclepositions?format=json'
-
-  # def self.config
-  # end
 
   # DataParser.config.stop_routes...
   def initialize(user_stop_id)
@@ -38,7 +36,7 @@ class DataParser
     for route in @user_route_ids
       @one_user_route = route
       puts "user route is #{@one_user_route}"
-      getAllTripIds(route)
+      return getAllTripIds(route)
     end
   end
 
@@ -52,13 +50,13 @@ class DataParser
       end
     end
     puts "all_trip_ids is #{all_trip_ids[0, 10]}"
-    getCurrentTrips(all_trip_ids)
+    return getCurrentTrips(all_trip_ids)
   end
 
 # 3. trip_ids -> current trip_ids & stop_ids
   def getCurrentTrips(all_trip_ids)
-    # current_trips = []
-    current_stops = []
+    current_trips = []
+    # current_stops = []
 
     # GTFS::Realtime.refresh_realtime_feed!
     vehicle_data = JSON.load(open(VEHICLE_POSITIONS))
@@ -76,51 +74,92 @@ class DataParser
             # puts "entity is #{entity["vehicle"]["trip"]["trip_id"]}"
             # puts "entity's stop_id is #{entity["vehicle"]["stop_id"]}"
 
-            current_stops << entity["vehicle"]["stop_id"].to_i
-            puts "current stops are #{current_stops}"
+            trip_hash = {entity["vehicle"]["trip"]["trip_id"]=> entity["vehicle"]["stop_id"].to_i}
+            current_trips << trip_hash
+            puts "current trips are #{current_trips}"
+            # current_stops << entity["vehicle"]["stop_id"].to_i
+            # puts "current stops are #{current_stops}"
           end
         end
       end
 
-    getArrayIndexes(current_stops)
+    return getArrayIndexes(current_trips)
   end
 
 # 5. route_id & stop_ids
-  def getArrayIndexes(current_stops)
-    route_stops_array = JSON.parse(File.read(ROUTE_STOPS))
+  def getArrayIndexes(current_trips)
     stop_index_array = []
     user_stop_index = 0
 
-    for route in route_stops_array
-      if route["route_id"] == @one_user_route
-        for current_stop in current_stops
-          user_stop_index = route["stop_ids"].index(@user_stop_id)
+    # route_stops_array = JSON.parse(File.read(ROUTE_STOPS))
+    trip_stops_array = JSON.parse(File.read(TRIP_STOPS))
 
-          stop_index_array << route["stop_ids"].index(current_stop)
-          puts "index is #{route["stop_ids"].index(current_stop)}"
+    for trip in trip_stops_array
+      for current_trip in current_trips
+        # puts "current_trip: #{current_trip} / trip[0]: #{trip[0]}"
+        if current_trip[trip[0]] != nil
+          puts "current_trip[trip[0]] is #{current_trip[trip[0]]}"
+          stops_array = trip[1]
+          if stops_array.include?(@user_stop_id)
+            puts "#{trip} comes to user"
+            user_stop_index = stops_array.index(@user_stop_id)
+            for stop in stops_array
+              if stop == current_trip[trip[0]]
+                stop_index_array << stops_array.index(current_trip[trip[0]])
+              end
+            end
+          end
         end
       end
     end
 
+    # puts "stop_index_array is #{stop_index_array}"
+
+    # for route in trip_stops_array
+    #   if route["route_id"] == @one_user_route
+    #     for current_stop in current_stops
+    #       user_stop_index = route["stop_ids"].index(@user_stop_id)
+    #       puts "user's stop index is #{route["stop_ids"].index(@user_stop_id)}"
+    #
+    #       stop_index_array << route["stop_ids"].index(current_stop)
+    #       puts "index is #{route["stop_ids"].index(current_stop)}"
+    #     end
+    #   end
+    # end
+
+
     if stop_index_array.count == 0
-      puts "there are no more buses running"
+      puts "there are no buses at this time"
     else
-      calculate(user_stop_index, stop_index_array)
+      return calculate(user_stop_index, stop_index_array)
     end
 
   end
 
 # 6. computation
   def calculate(user_stop_index, stop_index_array)
-    stops_away = stop_index_array[0]
-
+    puts "user_stop_index is #{user_stop_index}"
+    puts "stop_index_array is #{stop_index_array[0]}"
     for index in stop_index_array
-      if index < user_stop_index && index > stop_index_array[0]
-        stops_away = index
+      puts "in 1st index loop"
+      if index > user_stop_index
+        stop_index_array.delete(index)
+      elsif index == user_stop_index
+        puts "bus just passed"
       end
     end
 
-    puts "bus is #{stops_away} stops away"
+    stops_away = user_stop_index.to_i - stop_index_array[0].to_i
+
+    for index in stop_index_array
+      puts "in 2nd index loop"
+      if (user_stop_index - index) < stops_away
+        stops_away = user_stop_index - index
+      end
+    end
+
+    response = "bus is #{stops_away} stops away"
+    return response
   end
 
 end
