@@ -69,14 +69,34 @@ class DataParser
       puts "data objects: #{@entities_array[0, 4]}"
     end
 
-    for entity in @entities_array
-      for trip_id in all_trip_ids
-        if entity["vehicle"]["trip"]["trip_id"] == trip_id
-          # current_trips << entity["vehicle"]["trip"]["trip_id"]
-          current_stops << entity["vehicle"]["stop_id"]
-          puts "current stop is #{entity["vehicle"]["stop_id"]}"
+    for trip_id in all_trip_ids
+      for entity in @entities_array
+
+        if entity["vehicle"] == nil
+          puts "entity-vehicle fails"
+        else
+          if entity["vehicle"]["trip"] == nil
+            puts "entity-vehicle-trip fails"
+          else
+            if entity["vehicle"]["trip"]["trip_id"] == nil
+              puts "entity-vehicle-trip-trip-id fails"
+            else
+              if trip_id == entity["vehicle"]["trip"]["trip_id"]
+                current_stops << entity["vehicle"]["trip"]["stop_id"]
+                puts "adding #{entity["vehicle"]["trip"]["stop_id"]}"
+              end
+            end
+          end
         end
+        # if entity["vehicle"]["trip"]["trip_id"] == trip_id
+        #   # current_trips << entity["vehicle"]["trip"]["trip_id"]
+        #   current_stops << entity["vehicle"]["trip"]["stop_id"]
+        #   puts "current stop is #{entity["vehicle"]["trip"]["stop_id"]}"
+        # else
+        #   puts "nothing to see here"
+        # end
       end
+
     end
 
     getArrayIndexes(current_stops)
@@ -98,7 +118,12 @@ class DataParser
         end
       end
     end
-    calculate(user_stop_index, stop_index_array)
+
+    if stop_index_array.count == 0
+      puts "there are no more buses running"
+    else
+      calculate(user_stop_index, stop_index_array)
+    end
 
   end
 
@@ -111,8 +136,8 @@ class DataParser
         stops_away = index
       end
     end
-    puts "bus is #{stops_away} stops away"
 
+    puts "bus is #{stops_away} stops away"
   end
 
 end
