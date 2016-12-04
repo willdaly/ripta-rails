@@ -51,7 +51,7 @@ class DataParser
         all_trip_ids << trip["trip_id"]
       end
     end
-    puts "all_trip_ids is #{all_trip_ids}"
+    puts "all_trip_ids is #{all_trip_ids[0, 10]}"
     getCurrentTrips(all_trip_ids)
   end
 
@@ -66,38 +66,21 @@ class DataParser
       puts "can't open vehicle positions"
     else
       @entities_array = vehicle_data["entity"]
-      puts "data objects: #{@entities_array[0, 4]}"
+      puts "data objects: #{@entities_array[0, 3]}"
     end
 
-    for trip_id in all_trip_ids
-      for entity in @entities_array
+      for trip_id in all_trip_ids
+        for entity in @entities_array
+          if entity["vehicle"]["trip"]["trip_id"].to_i == trip_id
+            # puts "trip_id is #{trip_id}"
+            # puts "entity is #{entity["vehicle"]["trip"]["trip_id"]}"
+            # puts "entity's stop_id is #{entity["vehicle"]["stop_id"]}"
 
-        if entity["vehicle"] == nil
-          puts "entity-vehicle fails"
-        else
-          if entity["vehicle"]["trip"] == nil
-            puts "entity-vehicle-trip fails"
-          else
-            if entity["vehicle"]["trip"]["trip_id"] == nil
-              puts "entity-vehicle-trip-trip-id fails"
-            else
-              if trip_id == entity["vehicle"]["trip"]["trip_id"]
-                current_stops << entity["vehicle"]["trip"]["stop_id"]
-                puts "adding #{entity["vehicle"]["trip"]["stop_id"]}"
-              end
-            end
+            current_stops << entity["vehicle"]["stop_id"].to_i
+            puts "current stops are #{current_stops}"
           end
         end
-        # if entity["vehicle"]["trip"]["trip_id"] == trip_id
-        #   # current_trips << entity["vehicle"]["trip"]["trip_id"]
-        #   current_stops << entity["vehicle"]["trip"]["stop_id"]
-        #   puts "current stop is #{entity["vehicle"]["trip"]["stop_id"]}"
-        # else
-        #   puts "nothing to see here"
-        # end
       end
-
-    end
 
     getArrayIndexes(current_stops)
   end
