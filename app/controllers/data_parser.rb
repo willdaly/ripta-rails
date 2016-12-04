@@ -35,7 +35,7 @@ class DataParser
       end
 
       unless route_ids == nil
-        getTripIds(route_ids)
+        getAllTripIds(route_ids)
       end
     end
   end
