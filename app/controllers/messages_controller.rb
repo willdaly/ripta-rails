@@ -3,7 +3,7 @@ class MessagesController < ApplicationController
 
   def reply
     @client = Twilio::REST::Client.new ACCOUNT_SID, AUTH_TOKEN
-    body = params["Body"]
+    body = DataParser.new(params["Body"]).getRouteId
     reply = "user stop id: #{body}"
     sms = @client.messages.create(
       from: TWILIO_NUMBER,
