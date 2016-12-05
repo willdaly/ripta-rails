@@ -12,10 +12,10 @@ require 'numbers_controller.rb'
 # end
 
 class DataParser
-  STOP_ROUTES = 'app/assets/data/stop_routes.json'
-  TRIPS = 'app/assets/data/trips.json'
-  ROUTE_STOPS = 'app/assets/data/route_stops.json'
-  TRIP_STOPS = 'app/assets/data/stop_times_redux.json'
+  STOP_ROUTES = 'lib/data/stop_routes.json'
+  TRIPS = 'lib/data/trips.json'
+  ROUTE_STOPS = 'lib/data/route_stops.json'
+  TRIP_STOPS = 'lib/data/stop_times_redux.json'
   VEHICLE_POSITIONS = 'http://realtime.ripta.com:81/api/vehiclepositions?format=json'
 
   # DataParser.config.stop_routes...
