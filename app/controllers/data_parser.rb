@@ -70,15 +70,9 @@ class DataParser
       for trip_id in all_trip_ids
         for entity in @entities_array
           if entity["vehicle"]["trip"]["trip_id"].to_i == trip_id
-            # puts "trip_id is #{trip_id}"
-            # puts "entity is #{entity["vehicle"]["trip"]["trip_id"]}"
-            # puts "entity's stop_id is #{entity["vehicle"]["stop_id"]}"
-
             trip_hash = {entity["vehicle"]["trip"]["trip_id"]=> entity["vehicle"]["stop_id"].to_i}
             current_trips << trip_hash
             puts "current trips are #{current_trips}"
-            # current_stops << entity["vehicle"]["stop_id"].to_i
-            # puts "current stops are #{current_stops}"
           end
         end
       end
@@ -90,8 +84,6 @@ class DataParser
   def getArrayIndexes(current_trips)
     stop_index_array = []
     user_stop_index = 0
-
-    # route_stops_array = JSON.parse(File.read(ROUTE_STOPS))
     trip_stops_array = JSON.parse(File.read(TRIP_STOPS))
 
     for trip in trip_stops_array
@@ -112,21 +104,6 @@ class DataParser
         end
       end
     end
-
-    # puts "stop_index_array is #{stop_index_array}"
-
-    # for route in trip_stops_array
-    #   if route["route_id"] == @one_user_route
-    #     for current_stop in current_stops
-    #       user_stop_index = route["stop_ids"].index(@user_stop_id)
-    #       puts "user's stop index is #{route["stop_ids"].index(@user_stop_id)}"
-    #
-    #       stop_index_array << route["stop_ids"].index(current_stop)
-    #       puts "index is #{route["stop_ids"].index(current_stop)}"
-    #     end
-    #   end
-    # end
-
 
     if stop_index_array.count == 0
       puts "there are no buses at this time"
