@@ -14,7 +14,6 @@ require 'numbers_controller.rb'
 class DataParser
   STOP_ROUTES = 'lib/data/stop_routes.json'
   TRIPS = 'lib/data/trips.json'
-  ROUTE_STOPS = 'lib/data/route_stops.json'
   TRIP_STOPS = 'lib/data/stop_times_redux.json'
   VEHICLE_POSITIONS = 'http://realtime.ripta.com:81/api/vehiclepositions?format=json'
 
