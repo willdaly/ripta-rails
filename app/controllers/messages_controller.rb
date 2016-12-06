@@ -2,14 +2,13 @@ class MessagesController < ApplicationController
   skip_before_filter :verify_authenticity_token
 
   def reply
-    @client = Twilio::REST::Client.new ACCOUNT_SID, AUTH_TOKEN
-    body = DataParser.new(params["Body"]).getRouteId
-    reply = "#{body}"
-    sms = @client.messages.create(
-      from: TWILIO_NUMBER,
-      to: params["From"],
-      body: reply
-    )
+    sms = twilio.send_message(params["From"], "Hello World")
+  end
+
+  private
+
+  def twilio
+    TwilioService.new
   end
 
 end
