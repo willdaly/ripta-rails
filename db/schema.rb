@@ -33,10 +33,14 @@ ActiveRecord::Schema.define(version: 20161206000213) do
   end
 
   create_table "trips", force: :cascade do |t|
+    t.integer  "route_id"
     t.string   "trip_headsign"
     t.binary   "direction_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
 
+  add_index "trips", ["route_id"], name: "index_trips_on_route_id", using: :btree
+
+  add_foreign_key "trips", "routes"
 end
