@@ -1,10 +1,11 @@
 
-desc "create all trips"
+desc "create all stops routes and trips"
 task :stopsroutestrips => :environment do
 
   JSON.parse(File.read('lib/data/stop_routes.json')).each do |stop|
-    Stop.find_or_create_by(id: stop["stop_id"])
-    create_routes(stop["route_ids"])
+    s = Stop.find_or_create_by(id: stop["stop_id"])
+    routes = create_routes(stop["route_ids"])
+    create_stop_routes(s.id, routes)
   end
 
   JSON.parse(File.read('lib/data/trips.json')).each do |trip|
@@ -15,6 +16,12 @@ end
 
 def create_routes route_ids
   route_ids.each do |route_id|
-    Route.find_or_create_by(id: route_id)
+    route = Route.find_or_create_by(id: route_id)
+  end
+end
+
+def create_stop_routes stop_id, route_ids_array
+  route_ids_array.each do |route_id|
+    StopRoute.find_or_create_by(stop_id: stop_id, route_id: route_id)
   end
 end
