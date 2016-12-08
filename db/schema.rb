@@ -47,14 +47,6 @@ ActiveRecord::Schema.define(version: 20161207202844) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "trip_routes", id: false, force: :cascade do |t|
-    t.integer "trip_id"
-    t.integer "route_id"
-  end
-
-  add_index "trip_routes", ["route_id"], name: "index_trip_routes_on_route_id", using: :btree
-  add_index "trip_routes", ["trip_id"], name: "index_trip_routes_on_trip_id", using: :btree
-
   create_table "trips", force: :cascade do |t|
     t.integer  "route_id"
     t.string   "trip_headsign"
@@ -65,5 +57,4 @@ ActiveRecord::Schema.define(version: 20161207202844) do
 
   add_index "trips", ["route_id"], name: "index_trips_on_route_id", using: :btree
 
-  add_foreign_key "trips", "routes"
 end
