@@ -1,13 +1,20 @@
 class VehiclePositionsService
+  attr_reader :client
 
-  def initializer
+  def initialize
+    url = HTTParty.get("http://realtime.ripta.com:81/api/vehiclepositions?format=json")
+    @client = JSON.parse(url.body)
   end
 
-  def trip_ids
-    entities.map{|entity| trip_id(entity) }
+  def print_it
+    # byebug
+    puts @client
   end
+  # def trip_ids
+  #   entities.map{|entity| trip_id(entity) }
+  # end
 
-  def vehicles
+  def create_vehicles
     entities.map{|entity| vehicle_hash(entity)}
   end
 
@@ -15,8 +22,8 @@ class VehiclePositionsService
 
   def response
     # confusing it seems not to work in initializer, response class variable returns nil
-    url = HTTParty.get("http://realtime.ripta.com:81/api/vehiclepositions?format=json")
-    JSON.parse(url.body)
+    # url = HTTParty.get("http://realtime.ripta.com:81/api/vehiclepositions?format=json")
+    # JSON.parse(url.body)
   end
 
   def entities
@@ -27,10 +34,10 @@ class VehiclePositionsService
     entity["vehicle"]["trip"]["trip_id"].to_i
   end
 
-  def vehicle_hash entity
+  def create_vehicles entity
     vehicle = entity["vehicle"]
     trip = vehicle["trip"]
-    Vehicle.new(trip_id: trip["trip_id"], stop_id: vehicle["stop_id"], route_id: trip["route_id"])
+    Vehicle.new(id: trip["vehicle"]["id"], trip_id: trip["trip_id"], stop_id: vehicle["stop_id"], route_id: trip["route_id"])
   end
 
 end
