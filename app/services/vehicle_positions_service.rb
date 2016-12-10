@@ -7,6 +7,10 @@ class VehiclePositionsService
     entities.map{|entity| trip_id(entity) }
   end
 
+  def vehicles
+    entities.map{|entity| vehicle_hash(entity)}
+  end
+
   private
 
   def response
@@ -21,6 +25,12 @@ class VehiclePositionsService
 
   def trip_id entity
     entity["vehicle"]["trip"]["trip_id"].to_i
+  end
+
+  def vehicle_hash entity
+    vehicle = entity["vehicle"]
+    trip = vehicle["trip"]
+    Vehicle.new(trip_id: trip["trip_id"], stop_id: vehicle["stop_id"], route_id: trip["route_id"])
   end
 
 end

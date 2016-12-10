@@ -7,4 +7,8 @@ class Trip < ActiveRecord::Base
     VehiclePositionsService.new.trip_ids
   end
 
+  def stop_index stop
+    stops.index(stop)
+  end
+
 end
