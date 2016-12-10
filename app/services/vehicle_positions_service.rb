@@ -1,6 +1,9 @@
 class VehiclePositionsService
-
-  def initializer
+  attr_reader :response
+  
+  def initialize
+    url = HTTParty.get("http://realtime.ripta.com:81/api/vehiclepositions?format=json")
+    @response = JSON.parse(url.body)
   end
 
   def trip_ids
@@ -8,12 +11,6 @@ class VehiclePositionsService
   end
 
   private
-
-  def response
-    # confusing it seems not to work in initializer, response class variable returns nil
-    url = HTTParty.get("http://realtime.ripta.com:81/api/vehiclepositions?format=json")
-    JSON.parse(url.body)
-  end
 
   def entities
     response["entity"]
