@@ -7,6 +7,12 @@ class Vehicle < ActiveRecord::Base
   def stops_away user_stop
     usi = user_stop_index(user_stop)
     csi = current_stop_index
+    usi > csi ? usi - csi : nil
+  end
+
+  def stops_away_string user_stop
+    usi = user_stop_index(user_stop)
+    csi = current_stop_index
     usi > csi ? "#{trip.trip_headsign} is #{usi - csi} stops away " : nil
   end
 
