@@ -1,10 +1,6 @@
 Rails.application.routes.draw do
-  # resources :numbers
-  root 'numbers#new'
 
-  get '/numbers/new' => 'numbers#new'
-  post '/numbers/' => 'numbers#create'
-  delete '/numbers/:id' => 'numbers#destroy'
+  root to: proc { [404, {}, ["Not found."]] }
 
   post 'messages/reply' => 'messages#reply'
 
